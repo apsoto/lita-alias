@@ -9,9 +9,9 @@ For example, if you have a command to run a process on a heroku app to check sta
 
     /hk run my-company-production ./bin/check_stats
 
-That's a bit verbose for, so you could alias as:
+That's a bit verbose, so you could alias as `stats_prod` by doing the following:
    
-    /alias add stats_prod hk run my-company-production ./bin/refresh_cache
+    /alias add stats_prod hk run my-company-production ./bin/check_stats
 
 Then you simply have to type:
 
