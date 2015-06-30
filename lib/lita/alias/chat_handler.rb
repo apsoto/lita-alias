@@ -115,11 +115,11 @@ module Lita
       end
 
       def delete_alias_route(aliased_command)
-        self.class.routes.delete_if {|route| route.pattern.match(aliased_command.name) }
+        self.class.routes.delete_if { |route| route.pattern.match(aliased_command.name) }
       end
 
       def alias_route_exists?(aliased_command)
-        self.class.routes.any? {|route| route.pattern.match(aliased_command.name) }
+        self.class.routes.any? { |route| route.pattern.match(aliased_command.name) }
       end
     end
 
