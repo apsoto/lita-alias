@@ -23,7 +23,7 @@ module Lita
       # @raises ArgumentError if the alias is not valid
       # @return AliasedCommand The saved alias
       def add(aliased_command)
-        fail AliasAddException, "The alias is not valid" unless aliased_command.valid?
+        fail AliasAddException, 'The alias is not valid' unless aliased_command.valid?
 
         @redis.hset(STORE_KEY, aliased_command.name, aliased_command.command)
       end

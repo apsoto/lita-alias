@@ -33,8 +33,8 @@ module Lita
 
       ##########################
       # Event Handlers
-      def load_aliases(payload)
-        log.debug("Loading aliases")
+      def load_aliases(_payload)
+        log.debug('Loading aliases')
         alias_store.list.each do |ac|
           add_alias_route(ac)
         end
@@ -115,11 +115,11 @@ module Lita
       end
 
       def delete_alias_route(aliased_command)
-        self.class.routes.delete_if {|route| route.pattern.match(aliased_command.name) }
+        self.class.routes.delete_if { |route| route.pattern.match(aliased_command.name) }
       end
 
       def alias_route_exists?(aliased_command)
-        self.class.routes.any? {|route| route.pattern.match(aliased_command.name) }
+        self.class.routes.any? { |route| route.pattern.match(aliased_command.name) }
       end
     end
 
