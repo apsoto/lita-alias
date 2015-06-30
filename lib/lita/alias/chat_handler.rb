@@ -28,8 +28,6 @@ module Lita
             command: true,
             help: { 'alias delete NAME' => 'Delete the alias with NAME' }
            )
-      route(/alias\s+test/, :test_alias, command: true)
-      route(/alias\s+foo/, :foo, command: true)
 
       ##########################
       # Event Handlers
@@ -59,7 +57,7 @@ module Lita
 
       def trigger_alias(response)
         ac = alias_store.lookup(response.match_data[1])
-        message = Lita::Message.new(robot, "#{robot.alias}#{ac.command}", response.message.source)
+        message = Lita::Message.new(robot, "#{robot.mention_name} #{ac.command}", response.message.source)
         robot.receive(message)
       end
 
@@ -90,19 +88,6 @@ module Lita
       # @return AliasStore
       def alias_store
         @alias_store ||= AliasStore.new(redis)
-      end
-
-      def test_alias(response)
-        command = redis.hgetall(REDIS_ALIASES_KEY).first.last
-        message = Lita::Message.new(robot, command, response.message.source)
-        after(5) do
-          response.reply "Sending #{command}"
-          robot.receive(message)
-        end
-      end
-
-      def foo(response)
-        response.reply 'foo'
       end
 
       private
