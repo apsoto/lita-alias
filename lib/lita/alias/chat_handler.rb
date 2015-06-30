@@ -33,8 +33,8 @@ module Lita
 
       ##########################
       # Event Handlers
-      def load_aliases(payload)
-        log.debug("Loading aliases")
+      def load_aliases(_payload)
+        log.debug('Loading aliases')
         alias_store.list.each do |ac|
           add_alias_route(ac)
         end
