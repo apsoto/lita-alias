@@ -13,16 +13,24 @@ module Lita
 
       #########
       # Routes
-      route(/alias\s+add\s+(\w+)\s+(.+)/,
+
+      # The `add` route looks for a flag to modify behavior
+      # @see {AliasedCommand}
+      # @example
+      #   alias add foo bar
+      #   alias add --global foo bar
+      route(/alias\s+add\s+(\-+\w+\s)?(\w+)\s+(.+)/,
             :add,
             command: true,
-            help: { 'alias add NAME COMMAND' => 'Alias for sending COMMAND when NAME typed' }
+            help: { 'alias add [--global] NAME COMMAND' => 'Alias for sending COMMAND when NAME typed.' }
            )
+
       route(/alias\s+list/,
             :list,
             command: true,
             help: { 'alias list' => 'List all the saved aliases' }
            )
+
       route(/alias\s+delete\s+(\w+)/,
             :delete,
             command: true,
@@ -42,15 +50,16 @@ module Lita
       # Route Handlers
 
       def add(response)
-        name = response.match_data[1]
-        command = response.match_data[2]
+        global_flag = response.match_data[1]
+        name        = response.match_data[2]
+        command     = response.match_data[3]
 
         # TODO: support multiple commands
-        ac = AliasedCommand.new(name, command)
+        ac = AliasedCommand.new(name, command, global_flag)
         add_alias_route(ac)
         alias_store.add(ac)
 
-        response.reply "Added alias '#{name}' for '#{command}'"
+        response.reply "Added alias '#{name}' for '#{ac.command}'"
       rescue AliasStore::AliasAddException => e
         response.reply(e.message)
       end
@@ -95,7 +104,10 @@ module Lita
       def add_alias_route(aliased_command)
         return if alias_route_exists?(aliased_command)
 
-        self.class.route(/^(#{aliased_command.name})/, :trigger_alias, command: true)
+        # Decide whether ot not this is a command or message
+        command_truefalse = !aliased_command.global?
+
+        self.class.route(/^(#{aliased_command.name})/, :trigger_alias, command: command_truefalse)
         log.debug("Added route for alias '#{aliased_command.name}'")
       end
 

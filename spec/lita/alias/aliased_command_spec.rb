@@ -39,5 +39,25 @@ describe Lita::Alias::AliasedCommand do
     it '#command' do
       expect(dummy.command).to eq 'important command'
     end
+    it '#global?' do
+      expect(dummy.global?).to be false
+    end
+  end
+
+  context 'a global command' do
+    let(:dummy) { subject.class.new('some', 'more important command', '--global') }
+
+    it '#valid?' do
+      expect(dummy.valid?).to be_truthy
+    end
+    it '#name' do
+      expect(dummy.name).to eq 'some'
+    end
+    it '#command' do
+      expect(dummy.command).to eq 'more important command'
+    end
+    it '#global?' do
+      expect(dummy.global?).to be true
+    end
   end
 end
