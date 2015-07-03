@@ -104,10 +104,12 @@ module Lita
       def add_alias_route(aliased_command)
         return if alias_route_exists?(aliased_command)
 
-        # Decide whether ot not this is a command or message
-        command_truefalse = !aliased_command.global?
-
-        self.class.route(/^(#{aliased_command.name})/, :trigger_alias, command: command_truefalse)
+        self.class.route(
+          /^(#{aliased_command.name})/,
+          :trigger_alias,
+          # Decide whether ot not this is a command or message
+          command: !aliased_command.global?
+        )
         log.debug("Added route for alias '#{aliased_command.name}'")
       end
 
