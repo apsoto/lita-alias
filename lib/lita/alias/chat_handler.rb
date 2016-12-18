@@ -57,7 +57,8 @@ module Lita
 
       def trigger_alias(response)
         ac = alias_store.lookup(response.match_data[1])
-        message = Lita::Message.new(robot, "#{robot.mention_name} #{ac.command}", response.message.source)
+        body = "#{robot.mention_name} #{ac.command} #{response.args.join(' ')}".rstrip
+        message = Lita::Message.new(robot, body, response.message.source)
         robot.receive(message)
       end
 

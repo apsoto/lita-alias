@@ -47,6 +47,12 @@ describe Lita::Alias::ChatHandler, lita_handler: true do
           send_command('FOO')
           expect(replies.last).to eq 'BAR'
         end
+
+        it 'responds with extra args' do
+          send_command('alias add SAY echo')
+          send_command('SAY HELLO')
+          expect(replies.last).to eq 'HELLO'
+        end
       end
 
       context 'existing alias' do

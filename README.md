@@ -44,6 +44,13 @@ Adds an alias so when you type the command `/ALIAS` the COMMAND is sent instead 
 
 Example: `/alias add stats_prod hk run my-company-production ./bin/refresh_cache`
 
+**Extra arguments** given to the invoked ALIAS will be appended to the original COMMAND.
+
+```
+/alias add build jenkins job build
+/build my-project   # Executes: /jenkins job build my-project
+```
+
 ### delete
 
     /alias delete ALIAS
