@@ -95,16 +95,17 @@ module Lita
       def add_alias_route(aliased_command)
         return if alias_route_exists?(aliased_command)
 
-        self.class.route(/^(#{aliased_command.name})/, :trigger_alias, command: true)
+        alias_name = aliased_command.name
+        self.class.route(/^(#{alias_name})(\s|\z)/, :trigger_alias, command: true, alias_name: alias_name)
         log.debug("Added route for alias '#{aliased_command.name}'")
       end
 
       def delete_alias_route(aliased_command)
-        self.class.routes.delete_if { |route| route.pattern.match(aliased_command.name) }
+        self.class.routes.delete_if { |route| route.extensions[:alias_name] == aliased_command.name }
       end
 
       def alias_route_exists?(aliased_command)
-        self.class.routes.any? { |route| route.pattern.match(aliased_command.name) }
+        self.class.routes.any? { |route| route.extensions[:alias_name] == aliased_command.name }
       end
     end
 

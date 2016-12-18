@@ -35,7 +35,7 @@ describe Lita::Alias::ChatHandler, lita_handler: true do
       it 'returns current listing' do
         send_command('alias add FOO echo BAR')
         send_command('alias list')
-        expect(replies.last).to eq ['FOO => echo BAR']
+        expect(replies.last).to eq 'FOO => echo BAR'
       end
     end
 
