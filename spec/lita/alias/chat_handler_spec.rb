@@ -4,6 +4,7 @@ describe Lita::Alias::ChatHandler, lita_handler: true do
   context 'routes' do
     it 'receives commands and routes them' do
       expect(described_class).to route_command('alias add FOO BAR').to :add
+      expect(described_class).to route_command('alias add --global BAZ QUUX').to :add
       expect(described_class).to route_command('alias list').to :list
       expect(described_class).to route_command('alias delete FOO').to :delete
     end
@@ -58,6 +59,15 @@ describe Lita::Alias::ChatHandler, lita_handler: true do
           send_command('foobar')
           expect(replies.last).to eq 'BARFOO'
           expect(replies.include? 'FOOBAR').to be_falsey
+        end
+      end
+
+      context 'global alias' do
+        it 'sets a global alias' do
+          send_command('alias add --global barfoo echo BARFOO')
+          expect(replies.last).to eq "Added alias 'barfoo' for 'echo BARFOO'"
+          send_message('barfoo')
+          expect(replies.last).to eq 'BARFOO'
         end
       end
     end
